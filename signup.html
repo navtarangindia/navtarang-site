@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Navtarang India</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+  <!-- Header -->
+  <header class="flex justify-between p-4 bg-white shadow">
+    <h1 class="text-xl font-bold text-blue-600">Navtarang India</h1>
+    <a href="signin.html" class="text-blue-600 font-semibold">Already have an account? Sign In</a>
+  </header>
+
+  <!-- Sign Up Form -->
+  <main class="max-w-md mx-auto mt-10 bg-white p-8 rounded shadow">
+    <h2 class="text-2xl font-bold mb-6 text-center">Start Your Growth Journey</h2>
+
+    <form id="signupForm" name="signup" method="POST" data-netlify="true">
+
+      <!-- Netlify hidden input -->
+      <input type="hidden" name="form-name" value="signup">
+
+      <!-- Full Name -->
+      <label class="block mb-2 font-semibold">Full Name</label>
+      <input type="text" name="name" placeholder="John Doe" class="w-full border p-2 mb-4 rounded" required>
+
+      <!-- Email -->
+      <label class="block mb-2 font-semibold">Email</label>
+      <input type="email" name="email" placeholder="example@email.com" class="w-full border p-2 mb-4 rounded" required>
+
+      <!-- Password -->
+      <label class="block mb-2 font-semibold">Password</label>
+      <input type="password" name="password" placeholder="Create a strong password" class="w-full border p-2 mb-4 rounded" required>
+
+      <!-- Phone -->
+      <label class="block mb-2 font-semibold">Phone</label>
+      <input type="tel" name="phone" placeholder="+91" class="w-full border p-2 mb-4 rounded">
+
+      <!-- Advertising Region -->
+      <label class="block mb-2 font-semibold">Advertising Region</label>
+      <div class="relative mb-4">
+        <button id="regionBtn" type="button" class="w-full border p-2 rounded text-left flex justify-between items-center">
+          <span id="selectedRegion">India</span>
+          <svg class="w-4 h-4 transform rotate-180" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd" />
+          </svg>
+        </button>
+
+        <ul id="regionList" class="absolute z-10 w-full bg-white border rounded shadow mt-1 hidden max-h-60 overflow-y-auto">
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/in.svg" class="w-5 h-3 mr-2">India</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/br.svg" class="w-5 h-3 mr-2">Brazil</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/ca.svg" class="w-5 h-3 mr-2">Canada</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/mx.svg" class="w-5 h-3 mr-2">Mexico</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/us.svg" class="w-5 h-3 mr-2">US</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/ae.svg" class="w-5 h-3 mr-2">UAE</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/de.svg" class="w-5 h-3 mr-2">Germany</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/eg.svg" class="w-5 h-3 mr-2">Egypt</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/es.svg" class="w-5 h-3 mr-2">Spain</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/fr.svg" class="w-5 h-3 mr-2">France</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/be.svg" class="w-5 h-3 mr-2">Belgium</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/gb.svg" class="w-5 h-3 mr-2">UK</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/it.svg" class="w-5 h-3 mr-2">Italy</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/nl.svg" class="w-5 h-3 mr-2">Netherlands</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/pl.svg" class="w-5 h-3 mr-2">Poland</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/sa.svg" class="w-5 h-3 mr-2">Saudi Arabia</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/se.svg" class="w-5 h-3 mr-2">Sweden</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/tr.svg" class="w-5 h-3 mr-2">Turkey</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/sg.svg" class="w-5 h-3 mr-2">Singapore</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/au.svg" class="w-5 h-3 mr-2">Australia</li>
+          <li class="p-2 hover:bg-gray-100 flex items-center cursor-pointer"><img src="https://flagcdn.com/jp.svg" class="w-5 h-3 mr-2">Japan</li>
+        </ul>
+      </div>
+
+      <!-- Sign Up Button -->
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded mb-4">Sign Up</button>
+
+      <!-- Terms -->
+      <p class="text-xs text-center text-gray-500">
+        By clicking the button above, you agree to our <a href="terms.html" class="text-blue-600">Terms and Conditions</a>.
+      </p>
+    </form>
+  </main>
+
+  <!-- Dropdown & Form Script -->
+  <script>
+    // Dropdown for flags
+    const btn = document.getElementById("regionBtn");
+    const list = document.getElementById("regionList");
+    const selected = document.getElementById("selectedRegion");
+
+    btn.addEventListener("click", () => list.classList.toggle("hidden"));
+
+    list.querySelectorAll("li").forEach(item => {
+      item.addEventListener("click", () => {
+        selected.textContent = item.textContent.trim();
+        list.classList.add("hidden");
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!btn.contains(e.target) && !list.contains(e.target)) {
+        list.classList.add("hidden");
+      }
+    });
+
+    // Handle form submission
+    const form = document.getElementById("signupForm");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = {
+        name: form.name.value,
+        email: form.email.value,
+        password: form.password.value,
+        phone: form.phone.value,
+        region: selected.textContent
+      };
+
+      try {
+        // 1️⃣ Submit to Netlify Form (stores submission)
+        await fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({ "form-name": "signup", ...formData })
+        });
+
+        // 2️⃣ Call serverless function to send email
+        const response = await fetch("/.netlify/functions/send-email", {
+          method: "POST",
+          body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+          alert("Sign Up Successful! Confirmation email sent.");
+          form.reset();
+          selected.textContent = "India";
+        } else {
+          alert("Error sending confirmation email. Please try again.");
+        }
+
+      } catch (err) {
+        console.error(err);
+        alert("Something went wrong. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>

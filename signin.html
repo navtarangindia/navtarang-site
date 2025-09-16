@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - Navtarang India</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-blue-600">Navtarang India</h1>
+    <div>
+      <a href="index.html" class="mx-2">Home</a>
+      <a href="about.html" class="mx-2">About</a>
+      <a href="services.html" class="mx-2">Services</a>
+      <a href="contact.html" class="mx-2">Contact</a>
+      <a href="privacy.html" class="mx-2">Privacy</a>
+      <a href="terms.html" class="mx-2">Terms</a>
+      <a href="signup.html" class="mx-2">Sign Up</a>
+      <a href="signin.html" class="mx-2 font-semibold text-blue-600">Sign In</a>
+    </div>
+  </nav>
+
+  <!-- Sign In Form -->
+  <section class="p-8 max-w-md mx-auto bg-white shadow-md rounded-lg mt-8">
+    <h2 class="text-2xl font-bold mb-6 text-center">Welcome Back!</h2>
+
+    <form>
+      <!-- Email -->
+      <label class="block mb-2 font-medium">Email</label>
+      <input type="email" placeholder="Enter Email" class="w-full border p-2 rounded mb-4">
+
+      <!-- Password -->
+      <label class="block mb-2 font-medium">Password</label>
+      <input type="password" placeholder="Enter Password" class="w-full border p-2 rounded mb-4">
+
+      <!-- Sign In Button -->
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded mb-4">Sign In</button>
+
+      <p class="text-center text-gray-600 mb-4">OR</p>
+
+      <!-- Google Sign In -->
+      <button type="button" class="w-full bg-red-500 text-white py-2 rounded mb-4">Sign in with Google</button>
+
+      <!-- Links -->
+      <div class="flex justify-between text-sm mt-4">
+        <p>Don’t have an account? <a href="signup.html" class="text-blue-600 underline">Sign Up here</a></p>
+        <p><a href="reset-password.html" class="text-blue-600 underline">Reset Password?</a></p>
+      </div>
+    </form>
+  </section>
+
+</body>
+</html>
