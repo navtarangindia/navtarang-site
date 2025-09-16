@@ -1,0 +1,23 @@
+{
+  "name": "navtarang-site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "netlify dev"
+  },
+  "keywords": [],
+  "author": "Navtarang India",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/navtarangindia/navtarang-site.git"
+  },
+  "bugs": {
+    "url": "https://github.com/navtarangindia/navtarang-site/issues"
+  },
+  "homepage": "https://github.com/navtarangindia/navtarang-site#readme",
+  "dependencies": {
+    "nodemailer": "^7.0.6"
+  }
+}
