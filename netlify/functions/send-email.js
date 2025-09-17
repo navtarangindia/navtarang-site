@@ -1,56 +1,67 @@
+const { Client } = require("pg");
 const nodemailer = require("nodemailer");
 
-exports.handler = async function(event, context) {
+exports.handler = async (event) => {
   try {
     const data = JSON.parse(event.body);
 
-    if (!data.email || !data.name) {
-      return { statusCode: 400, body: JSON.stringify({ error: "Missing required fields" }) };
+    if (!data.name || !data.email) {
+      return { statusCode: 400, body: JSON.stringify({ error: "Missing fields" }) };
     }
 
-    // SMTP setup with Hostinger credentials from Netlify environment variables
+    // 1️⃣ Connect to Neon (Postgres)
+    const client = new Client({
+      connectionString: process.env.NETLIFY_DATABASE_URL,
+    });
+    await client.connect();
+
+    // 2️⃣ Insert user into "users" table
+    const insertUser = `
+      INSERT INTO users (name, email, phone, region)
+      VALUES ($1, $2, $3, $4)
+      RETURNING id
+    `;
+    const result = await client.query(insertUser, [
+      data.name,
+      data.email,
+      data.phone || null,
+      data.region || null,
+    ]);
+
+    const userId = result.rows[0].id;
+
+    // 3️⃣ Setup Nodemailer
     let transporter = nodemailer.createTransport({
       host: "smtp.hostinger.com",
       port: 587,
       secure: false,
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
+        pass: process.env.EMAIL_PASS,
+      },
     });
 
-    const amazonLoginUrl = "https://www.amazon.com/ap/oa?client_id=amzn1.application-oa2-client.d9273e4359b94f1b892bbf2bca64e300&scope=advertising::campaign_management&response_type=code&redirect_uri=https://navtarangindia.com/callback&state=SPECIAL";
-
-    const htmlBody = `
-      <p>Hello <strong>${data.name}</strong>,</p>
-      <p>Thank you for signing up with <strong>Navtarang India</strong>.</p>
-      <p><strong>Your registration details:</strong><br>
-      Email: ${data.email}<br>
-      Phone: ${data.phone || "N/A"}<br>
-      Region: ${data.region || "N/A"}</p>
-
-      <p>Click the button below to securely connect your Amazon Ads account:</p>
-      <p>
-        <a href="${amazonLoginUrl}">
-          <img src="https://images-na.ssl-images-amazon.com/images/G/01/lwa/btnLWA_gold_195x46.png" width="195" height="46" alt="Login with Amazon">
-        </a>
-      </p>
-
-      <p>Best regards,<br>Navtarang India Team</p>
-    `;
-
-    await transporter.sendMail({
+    // 4️⃣ Send email with LWA button
+    let mailOptions = {
       from: `"Navtarang India" <${process.env.EMAIL_USER}>`,
       to: data.email,
-      subject: "Complete Your Amazon Ads Connection - Navtarang India",
-      text: `Hello ${data.name},\nPlease login with Amazon: ${amazonLoginUrl}`,
-      html: htmlBody
-    });
+      subject: "Sign Up Confirmation - Navtarang India",
+      html: `<p>Hello ${data.name},</p>
+             <p>Thank you for signing up. Your details have been saved.</p>
+             <p>Click below to login with Amazon:</p>
+             <a href="https://www.amazon.com/ap/oa?client_id=amzn1.application-oa2-client.d9273e4359b94f1b892bbf2bca64e300&scope=advertising::campaign_management&response_type=code&redirect_uri=https://navtarangindia.com/.netlify/functions/callback?user_id=${userId}&state=SPECIAL">
+               <img src="https://images-na.ssl-images-amazon.com/images/G/01/lwa/btnLWA_gold_195x46.png" width="195" height="46" alt="Login with Amazon">
+             </a>`,
+    };
 
-    return { statusCode: 200, body: JSON.stringify({ message: "Email sent!" }) };
+    await transporter.sendMail(mailOptions);
 
-  } catch (error) {
-    console.error("Email sending error:", error);
-    return { statusCode: 500, body: JSON.stringify({ error: error.toString() }) };
+    await client.end();
+
+    return { statusCode: 200, body: JSON.stringify({ message: "Signup saved + Email sent!" }) };
+
+  } catch (err) {
+    console.error(err);
+    return { statusCode: 500, body: JSON.stringify({ error: err.toString() }) };
   }
 };
