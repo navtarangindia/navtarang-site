@@ -59,7 +59,7 @@ exports.handler = async (event) => {
 
     const clientId = process.env.AMAZON_CLIENT_ID;
     const redirectUri = "https://navtarangindia.com/netlify/functions/callback";
-    const lwaUrl = `https://www.amazon.com/ap/oa?client_id=client_id=amzn1.application-oa2-client.d9273e4359b94f1b892bbf2bca64e300&scope=advertising::campaign_management&response_type=code&redirect_uri=https://navtarangindia.com/netlify/functions/callback&state=USER_${userId}`;
+    const lwaUrl = `https://www.amazon.com/ap/oa?client_id=amzn1.application-oa2-client.d9273e4359b94f1b892bbf2bca64e300&scope=advertising::campaign_management&response_type=code&redirect_uri=https://navtarangindia.com/netlify/functions/callback&state=USER_${userId}`;
 
     let mailOptions = {
       from: `"Navtarang India" <${process.env.EMAIL_USER}>`,
