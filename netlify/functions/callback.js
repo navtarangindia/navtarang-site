@@ -1,47 +1,55 @@
-const fetch = require("node-fetch");
-const { Client } = require("pg");
-
+// netlify/functions/callback.js
 exports.handler = async (event) => {
+  // dynamic import for node-fetch
+  const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+
   try {
-    const code = event.queryStringParameters?.code;
-    const state = event.queryStringParameters?.state;
+    // Get code and state from query parameters
+    const params = event.queryStringParameters;
+    const code = params.code;
+    const state = params.state; // e.g., USER_1
+    const userId = state.replace("USER_", "");
+
     if (!code) return { statusCode: 400, body: "Missing code" };
 
-    const userId = state?.replace("USER_", "");
-    if (!userId) return { statusCode: 400, body: "Invalid state/user" };
-
-    // Exchange code for tokens
-    const tokenResponse = await fetch("https://api.amazon.com/auth/o2/token", {
+    // Exchange code for access token
+    const tokenRes = await fetch("https://api.amazon.com/auth/o2/token", {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
         grant_type: "authorization_code",
         code,
         client_id: process.env.AMAZON_CLIENT_ID,
         client_secret: process.env.AMAZON_CLIENT_SECRET,
-        redirect_uri: "https://navtarangindia.com/.netlify/functions/callback",
-      }),
+        redirect_uri: "https://navtarangindia.com/.netlify/functions/callback"
+      })
     });
 
-    const tokenData = await tokenResponse.json();
-    if (tokenData.error) return { statusCode: 400, body: JSON.stringify(tokenData) };
+    const tokenData = await tokenRes.json();
 
-    // Save tokens to Neon
+    if (!tokenData.access_token) {
+      console.error("Token response:", tokenData);
+      return { statusCode: 500, body: "Error: no access token returned" };
+    }
+
+    // Store tokens in Neon/Postgres DB
+    const { Client } = require("pg");
     const client = new Client({ connectionString: process.env.NETLIFY_DATABASE_URL });
     await client.connect();
+
     await client.query(
-      `UPDATE users SET amazon_access_token=$1, amazon_refresh_token=$2 WHERE id=$3`,
+      `UPDATE users SET access_token=$1, refresh_token=$2 WHERE id=$3`,
       [tokenData.access_token, tokenData.refresh_token, userId]
     );
+
     await client.end();
 
     return {
       statusCode: 200,
-      body: `✅ Tokens saved successfully for user ${userId}. You can close this page.`,
+      body: "✅ Access token saved successfully! You can close this page."
     };
-
   } catch (err) {
     console.error(err);
-    return { statusCode: 500, body: "Error processing callback: " + err.message };
+    return { statusCode: 500, body: "❌ Error processing callback" };
   }
 };
