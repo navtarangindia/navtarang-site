@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/navtarangindia/navtarang-site#readme",
   "dependencies": {
+    "node-fetch": "^3.3.2",
     "nodemailer": "^7.0.6",
     "pg": "^8.16.3"
   }
