@@ -35,14 +35,16 @@ exports.handler = async (event) => {
       return { statusCode: 500, body: "Error retrieving access token" };
     }
 
-    // 4️⃣ Save tokens in Neon (Postgres)
+    // 4️⃣ Save code + tokens in Neon (Postgres)
     const { Client } = require("pg");
     const client = new Client({ connectionString: process.env.NETLIFY_DATABASE_URL });
     await client.connect();
 
     await client.query(
-      `UPDATE users SET access_token=$1, refresh_token=$2 WHERE id=$3`,
-      [tokenData.access_token, tokenData.refresh_token, userId]
+      `UPDATE users 
+       SET access_token=$1, refresh_token=$2, auth_code=$3, token_received_at=NOW()
+       WHERE id=$4`,
+      [tokenData.access_token, tokenData.refresh_token, code, userId]
     );
 
     await client.end();
@@ -51,7 +53,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers: { "Content-Type": "text/html" },
-      body: `<h2>✅ Access token saved successfully!</h2><p>You can now close this page.</p>`
+      body: `<h2>✅ Access token and code saved successfully!</h2><p>You can now close this page.</p>`
     };
 
   } catch (err) {
