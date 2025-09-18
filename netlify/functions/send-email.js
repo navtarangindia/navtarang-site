@@ -41,7 +41,13 @@ exports.handler = async (event) => {
       },
     });
 
-    // 4️⃣ Send email with LWA button
+    // 4️⃣ Build LWA Login URL
+    const clientId = process.env.AMAZON_CLIENT_ID; // safer than hardcoding
+    const redirectUri = "https://navtarangindia.com/netlify/functions/callback";
+
+    const lwaUrl = `https://www.amazon.com/ap/oa?client_id=${clientId}&scope=advertising::campaign_management&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&state=USER_${userId}`;
+
+    // 5️⃣ Send email with LWA button
     let mailOptions = {
       from: `"Navtarang India" <${process.env.EMAIL_USER}>`,
       to: data.email,
@@ -49,7 +55,7 @@ exports.handler = async (event) => {
       html: `<p>Hello ${data.name},</p>
              <p>Thank you for signing up. Your details have been saved.</p>
              <p>Click below to login with Amazon:</p>
-             <a href="https://www.amazon.com/ap/oa?client_id=amzn1.application-oa2-client.d9273e4359b94f1b892bbf2bca64e300&scope=advertising::campaign_management&response_type=code&redirect_uri=https://navtarangindia.com/.netlify/functions/callback?user_id=${userId}&state=SPECIAL">
+             <a href="${lwaUrl}">
                <img src="https://images-na.ssl-images-amazon.com/images/G/01/lwa/btnLWA_gold_195x46.png" width="195" height="46" alt="Login with Amazon">
              </a>`,
     };
