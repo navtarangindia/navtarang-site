@@ -1,38 +1,41 @@
 // netlify/functions/callback.js
 exports.handler = async (event) => {
-  // dynamic import for node-fetch
-  const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-
   try {
-    // Get code and state from query parameters
+    // 1️⃣ Extract query parameters
     const params = event.queryStringParameters;
     const code = params.code;
-    const state = params.state; // e.g., USER_1
+    const state = params.state; // e.g., "USER_13"
+
+    if (!code || !state) {
+      return { statusCode: 400, body: "Missing code or state" };
+    }
+
     const userId = state.replace("USER_", "");
 
-    if (!code) return { statusCode: 400, body: "Missing code" };
+    // 2️⃣ Dynamic import of node-fetch
+    const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
-    // Exchange code for access token
-    const tokenRes = await fetch("https://api.amazon.com/auth/o2/token", {
+    // 3️⃣ Exchange code for access_token
+    const tokenResponse = await fetch("https://api.amazon.com/auth/o2/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
         grant_type: "authorization_code",
-        code,
+        code: code,
         client_id: process.env.AMAZON_CLIENT_ID,
         client_secret: process.env.AMAZON_CLIENT_SECRET,
         redirect_uri: "https://navtarangindia.com/.netlify/functions/callback"
       })
     });
 
-    const tokenData = await tokenRes.json();
+    const tokenData = await tokenResponse.json();
 
     if (!tokenData.access_token) {
-      console.error("Token response:", tokenData);
-      return { statusCode: 500, body: "Error: no access token returned" };
+      console.error(tokenData);
+      return { statusCode: 500, body: "Error retrieving access token" };
     }
 
-    // Store tokens in Neon/Postgres DB
+    // 4️⃣ Save tokens in Neon (Postgres)
     const { Client } = require("pg");
     const client = new Client({ connectionString: process.env.NETLIFY_DATABASE_URL });
     await client.connect();
@@ -44,12 +47,15 @@ exports.handler = async (event) => {
 
     await client.end();
 
+    // 5️⃣ Return success message
     return {
       statusCode: 200,
-      body: "✅ Access token saved successfully! You can close this page."
+      headers: { "Content-Type": "text/html" },
+      body: `<h2>✅ Access token saved successfully!</h2><p>You can now close this page.</p>`
     };
+
   } catch (err) {
     console.error(err);
-    return { statusCode: 500, body: "❌ Error processing callback" };
+    return { statusCode: 500, body: "❌ Error processing callback: " + err.toString() };
   }
 };
