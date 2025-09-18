@@ -4,87 +4,133 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up - Navtarang India</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.6.6/css/flag-icons.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:#f4f6f9;
+      margin:0;
+    }
+    .container {
+      max-width: 420px;
+      margin:60px auto;
+      background:#fff;
+      padding:25px;
+      border-radius:10px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    }
+    h2 { text-align:center; margin-bottom:20px; color:#007BFF; }
+    label { display:block; margin:12px 0 5px; font-weight:600; }
+    input, select, button {
+      width:100%; padding:12px;
+      border:1px solid #ccc; border-radius:6px;
+      font-size:14px;
+    }
+    button {
+      background:#007BFF; color:white;
+      font-weight:bold; cursor:pointer;
+      transition:0.2s ease;
+    }
+    button:hover { background:#0056b3; }
+    .signin {
+      text-align:right;
+      font-size:14px;
+      margin-bottom:10px;
+    }
+    .signin a { color:#007BFF; text-decoration:none; }
+    .signin a:hover { text-decoration:underline; }
+    .message { text-align:center; margin-top:12px; font-weight:bold; }
+    .error { color:red; }
+    .success { color:green; }
+    p.terms {
+      font-size:12px;
+      text-align:center;
+      margin-top:-10px;
+    }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
-
-  <!-- Navbar -->
-  <nav class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-blue-600">Navtarang India</h1>
-    <div>
-      <a href="index.html" class="mx-2">Home</a>
-      <a href="about.html" class="mx-2">About</a>
-      <a href="services.html" class="mx-2">Services</a>
-      <a href="contact.html" class="mx-2">Contact</a>
-      <a href="privacy.html" class="mx-2">Privacy</a>
-      <a href="terms.html" class="mx-2">Terms</a>
-      <a href="signup.html" class="mx-2 font-semibold text-blue-600">Sign Up</a>
-      <a href="signin.html" class="mx-2">Sign In</a>
+<body>
+  <div class="container">
+    <div class="signin">
+      Already have an account? <a href="signin.html">Sign In</a>
     </div>
-  </nav>
+    <h2>Create Account</h2>
+    <form id="signupForm">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter full name" required>
 
-  <!-- Signup Form -->
-  <section class="flex justify-center items-center min-h-screen bg-gray-100">
-    <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-      <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">Create Account</h2>
-      
-      <form id="signupForm" class="space-y-4">
-        <input type="text" name="name" placeholder="Full Name" required 
-               class="w-full p-3 border rounded-lg">
-        <input type="email" name="email" placeholder="Email" required 
-               class="w-full p-3 border rounded-lg">
-        <input type="text" name="phone" placeholder="Phone" 
-               class="w-full p-3 border rounded-lg">
-        <input type="text" name="region" placeholder="Region" 
-               class="w-full p-3 border rounded-lg">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter email" required>
 
-        <button type="submit" 
-                class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">
-          Sign Up
-        </button>
-      </form>
-      
-      <p id="signupMessage" class="mt-4 text-center text-sm"></p>
-    </div>
-  </section>
+      <label for="phone">Phone</label>
+      <input type="tel" id="phone" name="phone" placeholder="Enter phone number" required>
 
-  <!-- Script -->
+      <label for="region">Select Region</label>
+      <select id="region" name="region" required>
+        <option value="India" selected>🇮🇳 India</option>
+        <option value="United States">🇺🇸 United States</option>
+        <option value="United Kingdom">🇬🇧 United Kingdom</option>
+        <option value="Canada">🇨🇦 Canada</option>
+        <option value="Australia">🇦🇺 Australia</option>
+        <option value="Germany">🇩🇪 Germany</option>
+        <option value="France">🇫🇷 France</option>
+        <option value="Italy">🇮🇹 Italy</option>
+        <option value="Spain">🇪🇸 Spain</option>
+        <option value="Brazil">🇧🇷 Brazil</option>
+        <option value="Mexico">🇲🇽 Mexico</option>
+        <option value="Japan">🇯🇵 Japan</option>
+        <option value="China">🇨🇳 China</option>
+        <option value="Singapore">🇸🇬 Singapore</option>
+        <option value="UAE">🇦🇪 UAE</option>
+        <option value="Saudi Arabia">🇸🇦 Saudi Arabia</option>
+        <option value="South Africa">🇿🇦 South Africa</option>
+        <option value="Netherlands">🇳🇱 Netherlands</option>
+        <option value="Sweden">🇸🇪 Sweden</option>
+        <option value="Switzerland">🇨🇭 Switzerland</option>
+        <option value="New Zealand">🇳🇿 New Zealand</option>
+      </select>
+
+      <button type="submit">Sign Up</button>
+      <p class="terms">By clicking the button, you agree to our <a href="terms.html">Terms and Conditions</a></p>
+      <div class="message" id="formMessage"></div>
+    </form>
+  </div>
+
   <script>
-    document.getElementById("signupForm").addEventListener("submit", async (e) => {
+    document.getElementById("signupForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
-      const formData = {
-        name: e.target.name.value,
-        email: e.target.email.value,
-        phone: e.target.phone.value,
-        region: e.target.region.value,
-      };
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const region = document.getElementById("region").value;
+
+      const messageBox = document.getElementById("formMessage");
+      messageBox.textContent = "Sending...";
+      messageBox.className = "message";
 
       try {
-        const res = await fetch("/.netlify/functions/signup", {
+        const response = await fetch("/.netlify/functions/send-email", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({ name, email, phone, region })
         });
 
-        const result = await res.json();
-        const messageEl = document.getElementById("signupMessage");
+        const result = await response.json();
 
-        if (res.ok) {
-          messageEl.textContent = "✅ Signup successful! Check your email.";
-          messageEl.className = "text-green-600 text-center mt-4";
-          e.target.reset();
+        if (response.ok) {
+          messageBox.textContent = "✅ Confirmation email sent! Please check your inbox.";
+          messageBox.className = "message success";
+          document.getElementById("signupForm").reset();
         } else {
-          messageEl.textContent = "❌ Error: " + result.error;
-          messageEl.className = "text-red-600 text-center mt-4";
+          throw new Error(result.error || "Something went wrong.");
         }
       } catch (err) {
+        messageBox.textContent = "❌ Error sending confirmation email. Please try again.";
+        messageBox.className = "message error";
         console.error(err);
-        document.getElementById("signupMessage").textContent =
-          "❌ Something went wrong. Try again.";
       }
     });
   </script>
-
 </body>
 </html>
